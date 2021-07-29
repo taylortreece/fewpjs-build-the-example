@@ -4,6 +4,12 @@ const FULL_HEART = '♥'
 
 // Your JavaScript code goes here!
 
+document.getElementById('modal').classList.add('hidden')
+
+document.addEventListener('DOMContentLoaded', (e) => {
+  console.log('hello, world.')
+})
+
 
 
 
