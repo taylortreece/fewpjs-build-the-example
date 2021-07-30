@@ -1,9 +1,22 @@
 // Defining text characters for the empty and full hearts for you to use later.
 const EMPTY_HEART = '♡'
 const FULL_HEART = '♥'
+const likeButtons = document.getElementsByClassName('like-glyph')
+const rawPostList = document.getElementsByClassName('media-post')
+const postUrl="http://mimicServer.example.com"
+const numberOfPosts = document.getElementsByClassName('media-post').length
 
 // Your JavaScript code goes here!
 
+document.getElementById('modal').classList.add('hidden')
+
+document.addEventListener('DOMContentLoaded', (e) => {
+  console.log('hello, world.')
+
+  let refinedPostList = createPostObjects(rawPostList)
+  createLikeButtonEventListener(refinedPostList)
+
+})
 
 
 
@@ -22,4 +35,58 @@ function mimicServerCall(url="http://mimicServer.example.com", config={}) {
       }
     }, 300);
   });
+}
+
+function createLikeButtonEventListener(refinedPostList) {
+  for(const post of refinedPostList) {
+      buttonFunctionality(post);
+    }
+}
+
+function createPostObjects(rawPostList) {
+  let refinedPostList = []
+   for(const rawPost of rawPostList) {
+     let post = {
+       "id": `${rawPost.id}`,
+       "button":rawPost.getElementsByClassName('like-glyph'),
+       "likes":0}
+     refinedPostList.push(post)
+   }
+   return refinedPostList
+}
+
+ function buttonFunctionality(post) {
+   let button = post.button[0]
+   button.addEventListener('mousedown', () => {
+   mimicServerCall(postUrl, createConfig(post))
+
+    // ----- if server call is good -------
+
+    button.style.color = 'red'
+    post.likes += 1
+    displayPostLikes(post)
+    button.addEventListener('mouseup', () => {
+        button.style.color = 'black'
+      })
+   })
+ }
+
+function createConfig(post) {
+  config = {
+    method: "POST",
+    headers: {
+      "Content": "application/json",
+      "Accept": "application/json"
+    },
+    body: {
+      id: post.id,
+      likes: post.likes
+    }
+  }
+
+  return JSON.stringify(config)
+}
+
+function displayPostLikes(post) {
+  post.button[0].innerText = FULL_HEART + " +" + `${post.likes}`
 }
