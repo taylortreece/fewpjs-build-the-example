@@ -18,31 +18,6 @@ document.addEventListener('DOMContentLoaded', (e) => {
 
 })
 
-
-
-//------------------------------------------------------------------------------
-// Don't change the code below: this function mocks the server response
-//------------------------------------------------------------------------------
-
-function mimicServerCall(url="http://mimicServer.example.com", config={}) {
-  return new Promise(function(resolve, reject) {
-    setTimeout(function() {
-      let isRandomFailure = Math.random() < .2
-      if (isRandomFailure) {
-        reject("Random server error. Try again.");
-      } else {
-        resolve("Pretend remote server notified of action!");
-      }
-    }, 300);
-  });
-}
-
-function createLikeButtonEventListener(refinedPostList) {
-  for(const post of refinedPostList) {
-      buttonFunctionality(post);
-    }
-}
-
 function createPostObjects(rawPostList) {
   let refinedPostList = []
    for(const rawPost of rawPostList) {
@@ -53,6 +28,12 @@ function createPostObjects(rawPostList) {
      refinedPostList.push(post)
    }
    return refinedPostList
+}
+
+function createLikeButtonEventListener(refinedPostList) {
+  for(const post of refinedPostList) {
+      buttonFunctionality(post);
+    }
 }
 
  function buttonFunctionality(post) {
@@ -83,10 +64,27 @@ function createConfig(post) {
       likes: post.likes
     }
   }
-
   return JSON.stringify(config)
 }
 
 function displayPostLikes(post) {
   post.button[0].innerText = FULL_HEART + " +" + `${post.likes}`
+}
+
+
+//------------------------------------------------------------------------------
+// Don't change the code below: this function mocks the server response
+//------------------------------------------------------------------------------
+
+function mimicServerCall(url="http://mimicServer.example.com", config={}) {
+  return new Promise(function(resolve, reject) {
+    setTimeout(function() {
+      let isRandomFailure = Math.random() < .2
+      if (isRandomFailure) {
+        reject("Random server error. Try again.");
+      } else {
+        resolve("Pretend remote server notified of action!");
+      }
+    }, 300);
+  });
 }
