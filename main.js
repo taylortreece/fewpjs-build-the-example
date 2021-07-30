@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', (e) => {
 
 })
 
+// Helper Methods -----------------------------------
+
 function createPostObjects(rawPostList) {
   let refinedPostList = []
    for(const rawPost of rawPostList) {
@@ -38,17 +40,23 @@ function createLikeButtonEventListener(refinedPostList) {
 
  function buttonFunctionality(post) {
    let button = post.button[0]
+
    button.addEventListener('mousedown', () => {
    mimicServerCall(postUrl, createConfig(post))
+    .then(function(serverMessage){
 
     // ----- if server call is good -------
 
-    button.style.color = 'red'
-    post.likes += 1
-    displayPostLikes(post)
-    button.addEventListener('mouseup', () => {
-        button.style.color = 'black'
-      })
+    addButtonEventListenerActions(post)
+    }).catch(function(error) {
+
+    // ----- if server call is bad -------
+
+      const modal = document.getElementById("modal");
+      modal.className = "";
+      modal.innerText = error;
+      setTimeout(() =>  modal.className = "hidden", 3000);
+    });
    })
  }
 
@@ -69,6 +77,15 @@ function createConfig(post) {
 
 function displayPostLikes(post) {
   post.button[0].innerText = FULL_HEART + " +" + `${post.likes}`
+}
+
+function addButtonEventListenerActions(post) {
+  post.button[0].classList.add = 'activated-heart'
+  post.likes += 1
+  displayPostLikes(post)
+  // post.button[0].addEventListener('mouseup', () => {
+  //     post.button[0].classList.remove = 'activated-heart'
+  //   })
 }
 
 
